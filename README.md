@@ -4,9 +4,9 @@ K-Means is a clustering algorithm that groups data points based on their similar
 Randomly initializing cluster centers (the number of clusters is a parameter chosen at the beginning).
 
 Iterating until convergence:
-a. Calculating the color distance between each pixel and each cluster center.
-b. Assigning pixels to the nearest cluster centers (using the minimum color distance).
-c. Recalculating the mean values of cluster centers to obtain their new color values.
+          a. Calculating the color distance between each pixel and each cluster center.
+          b. Assigning pixels to the nearest cluster centers (using the minimum color distance).
+          c. Recalculating the mean values of cluster centers to obtain their new color values.
 
 Applying the final clusters to the image.
 
