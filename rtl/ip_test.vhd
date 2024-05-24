@@ -11,12 +11,12 @@ end ip_test;
 architecture Behavioral of ip_test is
 
     file slika_bits : text open read_mode is
-	"C:\Users\DK\Desktop\ip_v20_3\ip_repo\slika_bits.txt";
+	"C:\Users\DK\Desktop\ip_v20_4_b\ip_repo\slika_bits.txt";
 	file centri_bits : text open read_mode is
-	"C:\Users\DK\Desktop\ip_v20_3\ip_repo\centri_bits.txt";
+	"C:\Users\DK\Desktop\ip_v20_4_b\ip_repo\centri_bits.txt";
 	file izlazi_bits : text open read_mode is
-	"C:\Users\DK\Desktop\ip_v20_3\ip_repo\izlazi\izlaz_bits.txt";
-	file izlaz : text open write_mode is "C:/Users/DK/Desktop/ip_v20_3/ip_repo/izlazi/izlazi_ip.txt";  
+	"C:\Users\DK\Desktop\ip_v20_4_b\ip_repo\izlazi\izlaz_bits.txt";
+	file izlaz : text open write_mode is "C:/Users/DK/Desktop/ip_v20_4_b/ip_repo/izlazi/izlazi_ip.txt";  
 
     constant WIDTH : integer := 8;
     constant cols_c : integer := 100;
@@ -381,7 +381,7 @@ uut: entity work.ip_v1_0(arch_imp)
     port map (
         -- Interfejs za sliku
         ena     => ip_a_en,
-        wea     => ip_a_we,
+        wea     => open,
         addra   => ip_a_addr,
         dina    => open,
         douta   => ip_a_data,
@@ -391,7 +391,7 @@ uut: entity work.ip_v1_0(arch_imp)
         -- Interfejs za centre
         
         enb     => ip_b_en,
-        web     => ip_b_we,
+        web     => open,
         addrb   => ip_b_addr,
         dinb    => open,
         doutb   => ip_b_data,
@@ -400,7 +400,7 @@ uut: entity work.ip_v1_0(arch_imp)
         
         -- Interfejs za izlaz
         
-        enc     => ip_c_en,
+        enc     => open,
         wec     => ip_c_we,
         addrc   => ip_c_addr,
         dinc    => ip_c_data,
