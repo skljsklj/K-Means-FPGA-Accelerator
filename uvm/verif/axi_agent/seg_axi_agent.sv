@@ -3,8 +3,6 @@
 
 class seg_axi_agent extends uvm_agent;
     
-    //komponente
-
     seg_axi_monitor axi_mon;
 
     virtual interface seg_interface s_vif;

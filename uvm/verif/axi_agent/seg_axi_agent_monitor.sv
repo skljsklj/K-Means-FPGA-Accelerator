@@ -105,4 +105,3 @@ class seg_axi_monitor extends uvm_monitor;
 endclass:seg_axi_monitor
 
 `endif 
-

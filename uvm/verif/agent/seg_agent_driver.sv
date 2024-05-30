@@ -23,31 +23,36 @@ class seg_driver extends uvm_driver#(seg_seq_item);
             @(posedge s_vif.clk);
             if(s_vif.rst)
             begin
-                seq_item_port.get_next_item(req);
-                //`uvm_info(get_type_name(), $sformatf("Driver sending...\n%s"), req.sprint()), UVM_HIGH);
+                seq_item_port.get_next_item(req);;
                 `uvm_info(get_type_name(), $sformatf("Driver sending...\n%s", req.sprint()), UVM_HIGH);
                 
-                if(req.bram_axi == 0)
+                if(req.bram_axi == 2'd0)
                 begin
-                    // Fill the bram
+						$display("\nStarting BRAM AXI Transaction...\n");
                     s_vif.img_addra = req.img_addra;
                     s_vif.img_douta = req.img_douta;
-                    s_vif.img_ena = req.img_ena;
-
-                    s_vif.img_addrb = req.img_addrb;
-                    s_vif.img_doutb = req.img_doutb;
-                    s_vif.img_enb = req.img_enb;
-
-                    s_vif.img_addrc = req.img_addrc;
-                    s_vif.img_dinc = req.img_dinc;
-                    s_vif.img_wec = req.img_wec;
-                
+                    s_vif.img_ena = req.img_ena;               
                 end
-
+                else if (req.bram_axi == 2'd2)
+                begin
+                    s_vif.img_addrb = req.img_addrb;
+						$display("\nreq img_addrb = %0d\n", req.img_addrb);
+						$display("\ns_vif img_addrb = %0d\n", s_vif.img_addrb);
+                    s_vif.img_doutb = req.img_doutb;
+						$display("\nreq img_doutb = %0d\n", req.img_doutb);
+						$display("\ns_vif img_doutb = %0d\n", s_vif.img_doutb);
+                    s_vif.img_enb = req.img_enb;
+                end
+                else if (req.bram_axi == 2'd3)
+                begin                   
+                    s_vif.ip_addrc = req.ip_addrc;
+                    s_vif.ip_doutc = req.ip_doutc;
+                    s_vif.ip_enc = req.ip_enc;
+                end
                 else
                 begin   
                     //AXI write transaction
-                    $display("\nStarting AXI Transaction...\n");
+						$display("\nStarting AXI Transaction...\n");
                     s_vif.s00_axi_awaddr = req.s00_axi_awaddr;
                     s_vif.s00_axi_wdata = req.s00_axi_wdata;
                     s_vif.s00_axi_wstrb = 4'b1111;
@@ -71,7 +76,7 @@ class seg_driver extends uvm_driver#(seg_seq_item);
 
                     if(req.s00_axi_awaddr == AXI_BASE + CMD_REG_OFFSET && req.s00_axi_wdata == 1)
                     begin
-                        $display("\n Entering final detection...\n");
+							$display("\n Entering final detection...\n");
                         s_vif.s00_axi_arprot = 3'b000;
                         s_vif.s00_axi_araddr = AXI_BASE + STATUS_REG_OFFSET;
                         s_vif.s00_axi_arvalid = 1'b1;
@@ -85,7 +90,7 @@ class seg_driver extends uvm_driver#(seg_seq_item);
 
                         wait(s_vif.s00_axi_rdata == 0)
 
-                        $display ("\nSystem on the go!\n");
+							$display ("\nSystem on the go!\n");
                         s_vif.s00_axi_awaddr = AXI_BASE + CMD_REG_OFFSET;
                         s_vif.s00_axi_wdata = 32'd0;
                         s_vif.s00_axi_wstrb = 4'b1111;
@@ -106,14 +111,12 @@ class seg_driver extends uvm_driver#(seg_seq_item);
                         @(posedge s_vif.clk iff !s_vif.s00_axi_bvalid); 
                         #20
                         s_vif.s00_axi_bready = 1'b0;
-                        $display("\nStart signal taken down! \n");
-                        //////////////////////////////////////////////////////
-                        $display("\nWaiting for a finishing ready...\n");
+							$display("\nStart signal taken down! \n");
+							$display("\nWaiting for a finishing ready...\n");
                         #20
                         s_vif.s00_axi_arprot = 3'b000;
                         s_vif.s00_axi_araddr = AXI_BASE + STATUS_REG_OFFSET;
                         s_vif.s00_axi_arvalid = 1'b1;
-                        //s_vif.s00_axi_arready = 1'b1;
                         s_vif.s00_axi_rready  = 1'b1;  
 
                         @(posedge s_vif.clk iff s_vif.s00_axi_arready == 0);
@@ -123,21 +126,14 @@ class seg_driver extends uvm_driver#(seg_seq_item);
                         s_vif.s00_axi_araddr = 5'd0;
                         s_vif.s00_axi_arvalid = 1'b0;
 
-                        $display("\nDUT finished! \n");
-                    
+							$display("\nDUT finished! \n");                   
                     end
-
-                    $display("\nAxi Lite transaction completed! \n");
-
+							$display("\nAxi Lite transaction completed! \n");
                 end
-
-            seq_item_port.item_done();  
-
-        end
-        
-    end
-
-    endtask : main_phase
+				seq_item_port.item_done();  
+			end      
+		end
+	endtask : main_phase
 
 endclass : seg_driver
 

@@ -1,7 +1,6 @@
 `ifndef SEG_BASE_SEQUENCE_SV
     `define SEG_BASE_SEQUENCE_SV
-
-
+    
 class seg_base_sequence extends uvm_sequence#(seg_seq_item);
 
     `uvm_object_utils(seg_base_sequence)

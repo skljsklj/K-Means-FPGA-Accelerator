@@ -1,7 +1,8 @@
 `ifndef SEG_INTERFACE_SV
     `define SEG_INTERFACE_SV
 
-interface seg_interface(input clk, logic rst);
+interface seg_interface(input clk, logic rst , logic [23:0] ip_ena, logic [23:0] ip_addra, logic [23:0] ip_douta, 
+                        logic [23:0] ip_enb, logic [23:0] ip_addrb, logic [23:0] ip_doutb);
 
     parameter C_S00_AXI_DATA_WIDTH = 32;
     parameter C_S00_AXI_ADDR_WIDTH = 4;
@@ -17,11 +18,10 @@ interface seg_interface(input clk, logic rst);
      logic img_enb;
 
     // Memory - Output image
-     logic [31:0] img_addrc;
-     logic [23:0] img_dinc;
-     logic img_wec;
-
-     logic [23:0] img_doutc;
+     logic [31:0] ip_addrc;
+     logic [23:0] ip_doutc;
+     logic ip_enc;
+	 logic [23:0] img_doutc;
 
     // AXI Lite - Main registers
      logic [C_S00_AXI_ADDR_WIDTH -1:0] s00_axi_awaddr;

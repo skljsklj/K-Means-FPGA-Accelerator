@@ -6,10 +6,8 @@
     parameter COLS_REG_OFFSET = 4;
     parameter CMD_REG_OFFSET = 8;
     parameter STATUS_REG_OFFSET = 12;
-
     parameter C_S00_AXI_ADDR_WIDTH = 4;
     parameter C_S00_AXI_DATA_WIDTH = 32;
-
 
 class seg_axi_seq_item extends uvm_sequence_item;
 
@@ -27,10 +25,9 @@ class seg_axi_seq_item extends uvm_sequence_item;
     rand logic img_enb;
 
     // Memory - Output image
-    rand logic [31:0] img_addrc;
-    rand logic [23:0] img_dinc;
-    rand logic img_wec;
-
+    rand logic [31:0] ip_addrc;
+    rand logic [23:0] ip_doutc;
+    rand logic ip_enc;
     rand logic [23:0] img_doutc;
 
     // AXI Lite - Main registers
@@ -58,15 +55,12 @@ class seg_axi_seq_item extends uvm_sequence_item;
         `uvm_field_int(img_addra, UVM_DEFAULT );
         `uvm_field_int(img_douta, UVM_DEFAULT );
         `uvm_field_int(img_ena, UVM_DEFAULT );
-
         `uvm_field_int(img_addrb, UVM_DEFAULT );
         `uvm_field_int(img_doutb, UVM_DEFAULT );
         `uvm_field_int(img_enb, UVM_DEFAULT );
-
-        `uvm_field_int(img_addrc, UVM_DEFAULT );
-        `uvm_field_int(img_dinc, UVM_DEFAULT );
-        `uvm_field_int(img_wec, UVM_DEFAULT );
-
+        `uvm_field_int(ip_addrc, UVM_DEFAULT );
+        `uvm_field_int(ip_doutc, UVM_DEFAULT );
+        `uvm_field_int(ip_enc, UVM_DEFAULT );
         `uvm_field_int(s00_axi_awaddr, UVM_DEFAULT );
         `uvm_field_int(s00_axi_awprot, UVM_DEFAULT );
         `uvm_field_int(s00_axi_awvalid, UVM_DEFAULT );

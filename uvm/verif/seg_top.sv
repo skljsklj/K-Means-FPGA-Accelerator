@@ -8,36 +8,44 @@ module seg_top;
     logic clk;
     logic rst;
 
+    logic ip_ena;
+    logic [31:0] ip_addra;
+    logic [23:0] ip_douta;
+
+    logic ip_enb;
+    logic [31:0] ip_addrb;
+    logic [23:0] ip_doutb;
+
     // Interface
-    seg_interface s_vif(clk,rst);
+    seg_interface s_vif(clk,rst,ip_ena,ip_addra,ip_douta,ip_enb,ip_addrb,ip_doutb);
 
     // DUT
     ip_v1_0 DUT(
         // Interfejs za sliku
-        .ena     (s_vif.img_ena),
+        .ena     (ip_ena),
         .wea     (),
-        .addra   (s_vif.img_addra),
+        .addra   (ip_addra),
         .dina    (),
-        .douta   (s_vif.img_douta),
+        .douta   (ip_douta),
         .reseta  (),
         .clka    (),
         
         // Interfejs za centre
         
-        .enb     (s_vif.img_enb),
+        .enb     (ip_enb),
         .web     (),
-        .addrb   (s_vif.img_addrb),
+        .addrb   (ip_addrb),
         .dinb    (),
-        .doutb   (s_vif.img_doutb),
+        .doutb   (ip_doutb),
         .resetb  (),
         .clkb    (),
         
         // Interfejs za izlaz
         
         .enc     (),
-        .wec     (s_vif.img_wec),
-        .addrc   (s_vif.img_addrc),
-        .dinc    (s_vif.img_dinc),
+        .wec     (s_vif.ip_enc),
+        .addrc   (s_vif.ip_addrc),
+        .dinc    (s_vif.ip_doutc),
         .doutc   (24'd0),
         .resetc  (),
         .clkc    (),
@@ -66,12 +74,48 @@ module seg_top;
         .s00_axi_rready                (s_vif.s00_axi_rready)
         );
 
+    bram BRAM_A(
+        .clka   (clk), 
+        .clkb   (clk),
+        .reseta (rst),
+        .ena    (s_vif.img_ena),    
+        .wea    (1'b1),
+        .addra  (s_vif.img_addra),
+        .dia    (s_vif.img_douta),
+        .doa    (),
+
+        .resetb (rst),
+        .enb    (ip_ena),
+        .web    (1'b0),
+        .addrb  (ip_addra),
+        .dib    (24'd0),
+        .dob    (ip_douta)
+    );
+
+    bram BRAM_B(
+        .clka   (clk), 
+        .clkb   (clk),
+        .reseta (rst),
+        .ena    (s_vif.img_enb),    
+        .wea    (1'b1),
+        .addra  (s_vif.img_addrb),
+        .dia    (s_vif.img_doutb),
+        .doa    (),
+    
+        .resetb (rst),
+        .enb    (ip_enb),
+        .web    (1'b0),
+        .addrb  (ip_addrb),
+        .dib    (24'd0),
+        .dob    (ip_doutb)
+    );
+    
     initial begin
         uvm_config_db#(virtual seg_interface)::set(null,"uvm_test_top.env","seg_interface",s_vif);
         run_test("test_seg_simple");
     end
 
-    // Clock and reset init - Reset is active on 0
+    // Clock and reset init
     initial begin
         clk <= 0;
         rst <= 0;

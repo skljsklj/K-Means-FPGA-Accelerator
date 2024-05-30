@@ -2,15 +2,13 @@
     `define SEG_AGENT_SV
 
 class seg_agent extends uvm_agent;
-    
-    //komponente
 
     seg_driver drv;
     seg_sequencer seqr;
     seg_monitor mon;
+	
     virtual interface seg_interface s_vif;
 
-    //konfiguracija
     seg_config cfg;
     
     `uvm_component_utils_begin(seg_agent)
@@ -43,7 +41,6 @@ class seg_agent extends uvm_agent;
             drv = seg_driver::type_id::create("drv",this);
             seqr = seg_sequencer::type_id::create("seqr",this);
         end
-
     endfunction : build_phase
 
     function void connect_phase(uvm_phase phase);

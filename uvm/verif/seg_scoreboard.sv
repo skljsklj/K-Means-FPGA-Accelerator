@@ -7,11 +7,11 @@ class seg_scoreboard extends uvm_scoreboard;
 
     uvm_analysis_imp#(seg_seq_item, seg_scoreboard) item_collected_import;
 
-    int num_of_tr;
+    int num_of_tr = 1;
 
-    `uvm_component_utils_begin(seg_scoreboard)
-        `uvm_field_int(checks_enable, UVM_DEFAULT)
-        `uvm_field_int(coverage_enable, UVM_DEFAULT)
+	`uvm_component_utils_begin(seg_scoreboard)
+		`uvm_field_int(checks_enable, UVM_DEFAULT)
+		`uvm_field_int(coverage_enable, UVM_DEFAULT)
     `uvm_component_utils_end
 
     function new(string name = "seg_scoreboard", uvm_component parent = null);
@@ -31,20 +31,19 @@ class seg_scoreboard extends uvm_scoreboard;
     endfunction : connect_phase
 
     function void write(seg_seq_item curr_it);
+       
         if(checks_enable)
         begin
-            `uvm_info(get_type_name(),$sformatf("\n[Scoreboard] Scoreboard function write called..."), UVM_MEDIUM);
-            asrt_img_output : assert(curr_it.img_dinc == cfg.img_gv_data[curr_it.img_addrc/4])
-                `uvm_info(get_type_name(), $sformatf("\nMatch succesfull\nObserved value is %d, expected is %d.\n", 
-                curr_it.img_dinc, 
-                cfg.img_gv_data[curr_it.img_addrc/4]), UVM_MEDIUM)
-            
+            `uvm_info(get_type_name(),$sformatf("[Scoreboard] Scoreboard function write called..."), UVM_MEDIUM);           
+				asrt_img_output : assert(curr_it.ip_doutc == cfg.img_gv_data[curr_it.ip_addrc/4])
+            `uvm_info(get_type_name(), $sformatf("Match succesfull\nObserved value is %d, expected is %d.\n", 
+                curr_it.ip_doutc, 
+                cfg.img_gv_data[curr_it.ip_addrc/4]), UVM_MEDIUM)      
             else
-                `uvm_error(get_type_name(), $sformatf("\nObserved mismatch for img_output[%d]\n Observed value is %d, expected is %d.\n",
-                curr_it.img_addrc/4,
-                curr_it.img_dinc,
-                cfg.img_gv_data[curr_it.img_addrc/4]))
-            
+                `uvm_fatal(get_type_name(), $sformatf("\nObserved mismatch for img_output[%0d]\n Observed value is %0d, expected is %0d.\n",
+                curr_it.ip_addrc/4,
+                curr_it.ip_doutc,
+                cfg.img_gv_data[curr_it.ip_addrc/4]))           
             ++num_of_tr;
         end
     endfunction

@@ -43,4 +43,7 @@ update_compile_order -fileset sim_1
 
 set_property -name {xsim.compile.xvlog.more_options} -value {-L uvm} -objects [get_filesets sim_1]
 set_property -name {xsim.elaborate.xelab.more_options} -value {-L uvm} -objects [get_filesets sim_1]
-set_property -name {xsim.simulate.xsim.more_options} -value {-testplusarg UVM_TESTNAME=test_seg_simple -testplusarg UVM_VERBOSITY=UVM_LOW} -objects [get_filesets sim_1]
+set_property -name {xsim.simulate.xsim.more_options} -value {-testplusarg UVM_TESTNAME=test_seg_simple -testplusarg UVM_VERBOSITY=UVM_MEDIUM} -objects [get_filesets sim_1]
+
+set_property target_language VHDL [current_project]
+set_property -name {xsim.simulate.runtime} -value {300 ms} -objects [get_filesets sim_1]
